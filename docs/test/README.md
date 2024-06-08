@@ -5,71 +5,62 @@
 
 ## Запуск сервера
 
-![](./photos/server_start.png)
+![](./photos/photo_start_server.jpg)
 
 ## Тестування GET
 
-### Отримати всіх користувачів
+### Отримати всіх доступів
 
 #### Запит:
-![](./photos/get_all_users.png)
+![](./photos/photo_get_all_access_aftdel.jpg)
 
 #### Результат:
-![](./photos/get_all_users_result.png)
+![](./photos/photo_get_all_access_aftdel_result.jpg)
 
-### Отримати користувача по id
+### Отримати доступу по id
 
 #### Запит:
-![](./photos/get_user_id1.png)
+![](./photos/photo_get_access_id2.jpg)
 
 #### Результат:
-![](./photos/get_user_id1_result.png)
+![](./photos/photo_get_access_result.jpg)
 
 ## Тестування POST
 
-### Додати користувача
+### Додати доступ
 
 #### Запит:
-![](./photos/add_user_id6.png)
+![](./photos/photo_add_access_id3.jpg)
 
 #### Результат:
-![](./photos/add_user_id6_result.png)
+![](./photos/photo_add_access_id3_result.jpg)
 
 #### Перевірка за допомогою GET:
-![](./photos/get_user_id6.png)
+![](./photos/photo_get_access_id3.jpg)
 
-![](./photos/get_user_id6_result.png)
+![](./photos/photo_get_access_id3_result.jpg)
 
 ## Тестування PUT
 
-### Змінити користувача по id
+### Змінити доступ по id
 
 #### Запит:
-![](./photos/update_user_6.png)
+![](./photos/photo_update_access_id3.jpg)
 
 #### Результат:
-![](./photos/update_user_6_result.png)
-
-#### Перевірка за допомогою GET:
-![](./photos/get_user_id6_after_update.png)
-
-![](./photos/get_user_id6_after_update_result.png)
+![](./photos/photo_update_access_id3_result.jpg)
 
 ## Тестування DELETE
 
-### Видалити користувача по id
+### Видалити доступ по id
 
 #### Запит:
-![](./photos/delete_user_6.png)
+![](./photos/photo_delete_access3.jpg)
 
 #### Результат:
-![](./photos/delete_user_6_result.png)
+![](./photos/photo_delete_access3_result.jpg)
 
 #### Перевірка за допомогою GET:
-![](./photos/get_all_users_after_delete.png)
+![](./photos/photo_get_all_access_aftdel.jpg)
 
-![](./photos/get_all_users_after_delete_result.png)
-
-![](./photos/get_user_6_after_delete.png)
-
-![](./photos/get_user_6_after_delete_result.png)
+![](./photos/photo_get_all_access_aftdel_result.jpg)

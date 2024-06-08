@@ -332,17 +332,17 @@ from flask import Flask
 app = Flask(__name__)
 ```
 
-- user_module.py:
+- access_module.py:
 ```python
 import mysql.connector
 
 
-class Users:
+class Access:
     def __init__(self):
         try:
             self.host = 'localhost'
             self.user = 'root'
-            self.password = 'root123'
+            self.password = 'password'
             self.db = 'mydb'
 
             self.connection = mysql.connector.connect(host=self.host,
@@ -355,126 +355,121 @@ class Users:
         except mysql.connector.Error as err:
             print("Failed to connect to database:", err)
 
-    def get_all_users(self):
+    def get_all_access(self):
         try:
-            self.cursor.execute("select * from user")
-            users = self.cursor.fetchall()
+            self.cursor.execute("select * from access")
+            access = self.cursor.fetchall()
 
             if self.cursor.rowcount == 0:
-                return {"message": "No users", "error": "Not Found", "status_code": 404}
+                return {"message": "No access", "error": "Not Found", "status_code": 404}
 
-            return users
+            return access
         except mysql.connector.Error as err:
-            return {'message': 'Failed to get all users', 'error': str(err), 'status_code': 500}
+            return {'message': 'Failed to get all access', 'error': str(err), 'status_code': 500}
 
-    def get_user_by_id(self, user_id):
+    def get_access_by_id(self, access_id):
         try:
-            user_id = int(user_id)
-            self.cursor.execute("select * from user where `User.id` = %s", (user_id,))
-            user = self.cursor.fetchone()
+            access_id = int(access_id)
+            self.cursor.execute("select * from access where `Access.id` = %s", (access_id,))
+            access = self.cursor.fetchone()
 
             if self.cursor.rowcount == 0:
-                return {"message": f"No user with id {user_id}", "error": "Not Found", "status_code": 404}
+                return {"message": f"No access with id {access_id}", "error": "Not Found", "status_code": 404}
 
-            return user
+            return access
         except mysql.connector.Error as err:
-            return {'message': 'Failed to get user', 'error': str(err), 'status_code': 500}
+            return {'message': 'Failed to get access', 'error': str(err), 'status_code': 500}
         except ValueError:
-            return {"message": "Invalid user id", "error": "Bad Request", "status_code": 400}
+            return {"message": "Invalid access id", "error": "Bad Request", "status_code": 400}
 
-    def add_user(self, info):
+    def add_access(self, info):
         try:
             self.cursor.execute('start transaction')
-            self.cursor.execute(f"insert into user (`User.id`, `User.username`, `User.email`, `User.password`, "
-                                f"`User.firstname`, `User.lastname`, `Usercol`, `Role_Role.id`) "
+            self.cursor.execute(f"insert into access (`Access.id`, `User_User.id`, `Datafile_Datafile.id`) "
                                 f"values {tuple([i for i in info.values()])}")
             self.connection.commit()
 
             if self.cursor.rowcount > 0:
-                return {"message": "User added to database", "status_code": 200}
+                return {"message": "Access added to database", "status_code": 200}
             else:
-                return {"message": "User was not added to database", "error": "Not Acceptable", "status_code": 406}
+                return {"message": "Access was not added to database", "error": "Not Acceptable", "status_code": 406}
         except mysql.connector.Error as err:
             self.connection.rollback()
-            return {'message': 'Failed to add user', 'error': str(err), 'status_code': 500}
+            return {'message': 'Failed to add access', 'error': str(err), 'status_code': 500}
 
-    def delete_user(self, user_id):
+    def delete_access(self, access_id):
         try:
-            user_id = int(user_id)
+            access_id = int(access_id)
             self.cursor.execute('start transaction')
             rows_deleted = 0
-            self.cursor.execute("delete from user where `User.id` = %s", (user_id,))
+            self.cursor.execute("delete from request where `Access_Access.id` = %s", (access_id,))
             rows_deleted += self.cursor.rowcount
-            self.cursor.execute("delete from request where `User_User.id` = %s", (user_id,))
-            rows_deleted += self.cursor.rowcount
-            self.cursor.execute("delete from access where `User_User.id` = %s", (user_id,))
+            self.cursor.execute("delete from access where `Access.id` = %s", (access_id,))
             rows_deleted += self.cursor.rowcount
             self.connection.commit()
             if rows_deleted > 0:
-                return {"message": f"User {user_id} deleted from database", "status_code": 204}
+                return {"message": f"Access {access_id} deleted from database", "status_code": 204}
             else:
-                return {"message": f"User {user_id} was not deleted from database",
+                return {"message": f"Access {access_id} was not deleted from database",
                         "error": "Not Found", "status_code": 404}
         except mysql.connector.Error as err:
             self.connection.rollback()
-            return {'message': 'Failed to delete user', 'error': str(err), 'status_code': 500}
+            return {'message': 'Failed to delete access', 'error': str(err), 'status_code': 500}
         except ValueError:
-            return {"message": "Invalid user id", "error": "Bad Request", "status_code": 400}
+            return {"message": "Invalid access id", "error": "Bad Request", "status_code": 400}
 
-    def update_user(self, user_id, info):
+    def update_access(self, access_id, info):
         try:
-            user_id = int(user_id)
+            access_id = int(access_id)
             self.cursor.execute('start transaction')
             updated_rows = 0
             for i in info.items():
-                self.cursor.execute(f"update user set `{i[0]}` = '{i[1]}' where `User.id` = {user_id}")
+                self.cursor.execute(f"update access set `{i[0]}` = '{i[1]}' where `Access.id` = {access_id}")
                 updated_rows += 1
             self.connection.commit()
 
             if updated_rows > 0:
-                return {"message": f"User {user_id} updated in database", "status_code": 200}
+                return {"message": f"Access {access_id} updated in database", "status_code": 200}
             else:
-                return {"message": f"User {user_id} was not updated in database",
+                return {"message": f"Access {access_id} was not updated in database",
                         "error": "Not Acceptable", "status_code": 406}
         except mysql.connector.Error as err:
             self.connection.rollback()
-            return {'message': 'Failed to update user', 'error': str(err), 'status_code': 500}
+            return {'message': 'Failed to update access', 'error': str(err), 'status_code': 500}
         except ValueError:
-            return {"message": "Invalid user id", "error": "Bad Request", "status_code": 400}
-```
+            return {"message": "Invalid access id", "error": "Bad Request", "status_code": 400}```
 
-- user_controller.py:
+- access_controller.py:
 ```python
 from flask import request, jsonify
-from user_model import Users
+from access_module import Access
 from app_init import app
 
-users = Users()
+access = Access()
 
 
-@app.route("/users", methods=['GET'])
-def get_all_users():
-    return jsonify(users.get_all_users())
+@app.route("/access", methods=['GET'])
+def get_all_access():
+    return jsonify(access.get_all_access())
 
 
-@app.route("/user/<user_id>", methods=['GET'])
-def get_user_by_id(user_id):
-    return jsonify(users.get_user_by_id(user_id))
+@app.route("/access/<access_id>", methods=['GET'])
+def get_access_by_id(access_id):
+    return jsonify(access.get_access_by_id(access_id))
 
 
-@app.route("/users/add", methods=['POST'])
-def add_user():
+@app.route("/access/add", methods=['POST'])
+def add_access():
     url_params = request.args.to_dict()
-    return jsonify(users.add_user(url_params))
+    return jsonify(access.add_access(url_params))
 
 
-@app.route("/users/delete/<user_id>", methods=['DELETE'])
-def delete_user(user_id):
-    return jsonify(users.delete_user(user_id))
+@app.route("/access/delete/<access_id>", methods=['DELETE'])
+def delete_access(access_id):
+    return jsonify(access.delete_access(access_id))
 
 
-@app.route("/users/update/<user_id>", methods=['PUT'])
-def update_user(user_id):
+@app.route("/access/update/<access_id>", methods=['PUT'])
+def update_access(access_id):
     url_params = request.args.to_dict()
-    return jsonify(users.update_user(user_id, url_params))
-```
+    return jsonify(access.update_access(access_id, url_params))```
